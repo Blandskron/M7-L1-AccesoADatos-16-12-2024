@@ -1,0 +1,46 @@
+python manage.py shell
+
+from school.models import Estudiante, Curso
+
+estudiantes_data = [
+    {"nombre": "Juan", "apellido": "Pérez", "correo": "juan.perez@example.com", "edad": 20},
+    {"nombre": "Ana", "apellido": "Gómez", "correo": "ana.gomez@example.com", "edad": 22},
+    {"nombre": "Luis", "apellido": "Martínez", "correo": "luis.martinez@example.com", "edad": 18},
+    {"nombre": "María", "apellido": "Fernández", "correo": "maria.fernandez@example.com", "edad": 25},
+    {"nombre": "Carlos", "apellido": "López", "correo": "carlos.lopez@example.com", "edad": 21},
+]
+
+for data in estudiantes_data:
+    Estudiante.objects.create(**data)
+
+cursos_data = [
+    {"nombre": "Matemáticas", "descripcion": "Curso de álgebra y cálculo."},
+    {"nombre": "Historia", "descripcion": "Curso de historia mundial."},
+    {"nombre": "Física", "descripcion": "Curso de mecánica y termodinámica."},
+    {"nombre": "Química", "descripcion": "Curso de química orgánica e inorgánica."},
+    {"nombre": "Literatura", "descripcion": "Curso de análisis literario."},
+]
+
+for data in cursos_data:
+    Curso.objects.create(**data)
+
+curso_matematicas = Curso.objects.get(nombre="Matemáticas")
+curso_historia = Curso.objects.get(nombre="Historia")
+
+juan = Estudiante.objects.get(correo="juan.perez@example.com")
+ana = Estudiante.objects.get(correo="ana.gomez@example.com")
+luis = Estudiante.objects.get(correo="luis.martinez@example.com")
+
+curso_matematicas.estudiantes.add(juan, ana)
+curso_historia.estudiantes.add(ana, luis)
+curso_historia.estudiantes.add(juan)
+
+print("Estudiantes creados:")
+for estudiante in Estudiante.objects.all():
+    print(estudiante)
+
+print("\nCursos creados:")
+for curso in Curso.objects.all():
+    print(f"{curso.nombre}: {curso.estudiantes.count()} estudiantes")
+
+exit()
